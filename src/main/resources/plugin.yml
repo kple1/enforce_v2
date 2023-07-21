@@ -1,0 +1,17 @@
+name: enforce_v2
+version: '1.0'
+main: io.plugin.enforce_v2.Main
+api-version: '1.13'
+
+commands:
+  enforceTicket:
+    aliases: "강화권"
+
+  statEnforceTicket:
+    aliases: "스텟강화권"
+
+  enforceResetTicket:
+    aliases: "강화초기화권"
+
+  enforceAnvilCreate:
+    aliases: "강화모루"
