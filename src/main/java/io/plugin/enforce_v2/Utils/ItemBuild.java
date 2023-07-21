@@ -2,14 +2,11 @@ package io.plugin.enforce_v2.Utils;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class ItemBuild {
 
@@ -54,5 +51,11 @@ public class ItemBuild {
         return null;
     }
 
-    public final static ItemStack anvil = result_NameType(Material.ANVIL, 1, (Color.chat("&7[ 강화전용 모루 ]")));
+    public final static ItemStack anvil = result_LongType(Material.ANVIL, 1, (Color.chat("&7[ 강화전용 모루 ]")),
+            Color.chat("특수판별 코드 : 0a"));
+
+    public final static ItemStack blackGlass = result_ShortType(Material.BLACK_STAINED_GLASS_PANE, 1);
+    public final static ItemStack AIR = result_ShortType(Material.AIR, 1);
+    public final static ItemStack diamond = result_LongType(Material.DIAMOND, 1, Color.chat("&c&l&oStart!"));
+
 }
