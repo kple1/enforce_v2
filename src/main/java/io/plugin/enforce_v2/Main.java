@@ -6,6 +6,7 @@ import io.plugin.enforce_v2.Command.GiveEnforceTicket;
 import io.plugin.enforce_v2.Command.StatEnforceTicketCreate;
 import io.plugin.enforce_v2.Listener.AnvilClick;
 import io.plugin.enforce_v2.Listener.AnvilSet;
+import io.plugin.enforce_v2.Listener.InvClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,6 +24,7 @@ public final class Main extends JavaPlugin {
     public void Listener() {
         Bukkit.getPluginManager().registerEvents(new AnvilSet(), this);
         Bukkit.getPluginManager().registerEvents(new AnvilClick(), this);
+        Bukkit.getPluginManager().registerEvents(new InvClickEvent(), this);
     }
 
     @Override
