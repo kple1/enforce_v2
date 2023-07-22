@@ -45,4 +45,8 @@ public class InvClickEvent implements Listener {
             }
         }
     }
+
+    public void startEnforce() {
+
+    }
 }
