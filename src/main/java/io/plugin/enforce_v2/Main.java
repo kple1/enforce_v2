@@ -7,12 +7,20 @@ import io.plugin.enforce_v2.Command.StatEnforceTicketCreate;
 import io.plugin.enforce_v2.Listener.AnvilClick;
 import io.plugin.enforce_v2.Listener.AnvilSet;
 import io.plugin.enforce_v2.Listener.InvClickEvent;
+import io.plugin.enforce_v2.Utils.Color;
+import io.plugin.enforce_v2.Utils.ItemBuild;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public final class Main extends JavaPlugin {
 
     public static Main plugin;
+    private int taskId;
+    String title = Color.chat("&f[ &c&l강화 &f] ");
 
     public void Commands() {
         Bukkit.getPluginCommand("enforceTicket").setExecutor(new GiveEnforceTicket());
@@ -41,5 +49,24 @@ public final class Main extends JavaPlugin {
 
     public static Main getPlugin() {
         return plugin;
+    }
+
+    public void startTimer(Inventory inv, InventoryClickEvent event, Player player) {
+        taskId = new BukkitRunnable() {
+            int time = 1;
+
+            @Override
+            public void run() {
+                if (time >= 1 && time <= 9) {
+                    inv.setItem(26 + time, ItemBuild.yellowGlass);
+                }
+
+                if (time > 9) {
+                    this.cancel();
+                    return;
+                }
+                time++;
+            }
+        }.runTaskTimer(this, 0, 20).getTaskId(); // 1초마다 실행
     }
 }

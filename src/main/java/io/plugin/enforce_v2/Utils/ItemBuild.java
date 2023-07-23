@@ -57,5 +57,6 @@ public class ItemBuild {
     public final static ItemStack blackGlass = result_ShortType(Material.BLACK_STAINED_GLASS_PANE, 1);
     public final static ItemStack AIR = result_ShortType(Material.AIR, 1);
     public final static ItemStack diamond = result_LongType(Material.DIAMOND, 1, Color.chat("&c&l&oStart!"));
+    public final static ItemStack yellowGlass = result_NameType(Material.YELLOW_STAINED_GLASS_PANE, 1, Color.chat("&a&o&l강화중.."));
 
 }
