@@ -79,7 +79,7 @@ public class InvClickEvent implements Listener {
                     player.sendMessage(title + "사용권의 아이템 정보를 불러올 수 없습니다.");
                     return;
                 }
-                Main.getPlugin().startTimer(event.getInventory(), event, player);
+                Main.getPlugin().startTimer(event.getInventory(), event);
             }
         }
     }
