@@ -32,19 +32,19 @@ public class ItemBuild {
         return stack;
     }
 
-    public static ItemStack result_EnchantType(Material type, int amount, String displayName, Enchantment enchantment) {
+    public static ItemStack result_EnchantType(Material type, int amount, String displayName, Enchantment enchantment, int level) {
         ItemStack stack = new ItemStack(type, amount);
         ItemMeta meta = stack.getItemMeta();
         meta.setDisplayName(displayName);
-        meta.addEnchant(enchantment, 1, false);
+        meta.addEnchant(enchantment, level, false);
         stack.setItemMeta(meta);
         return stack;
     }
 
-    public static ItemStack giveEnforceItem(Enchantment enchantment, String level, String percentage, Player player) {
-        ItemStack giveItem = result_EnchantType(Material.BOOK, 1, (Color.chat("&b&o&l강화책")), enchantment);
+    public static ItemStack giveEnforceItem(Enchantment enchantment, String level, String percentage, Player player, int levels) {
+        ItemStack giveItem = result_EnchantType(Material.BOOK, 1, (Color.chat("&b&o&l강화책")), enchantment, levels);
         ItemMeta itemMeta = giveItem.getItemMeta();
-        itemMeta.setLore(Arrays.asList(Color.chat("&7최대 강화 : " + level),
+        itemMeta.setLore(Arrays.asList(Color.chat("최대 강화 : " + level),
                 Color.chat("&a강화 성공 확률 : " + percentage + "%")));
         giveItem.setItemMeta(itemMeta);
         player.getInventory().addItem(giveItem);
@@ -54,9 +54,8 @@ public class ItemBuild {
     public final static ItemStack anvil = result_LongType(Material.ANVIL, 1, (Color.chat("&7[ 강화전용 모루 ]")),
             Color.chat("특수판별 코드 : 0a"));
 
-    public final static ItemStack blackGlass = result_ShortType(Material.BLACK_STAINED_GLASS_PANE, 1);
+    public final static ItemStack blackGlass = result_LongType(Material.BLACK_STAINED_GLASS_PANE, 1, "");
     public final static ItemStack AIR = result_ShortType(Material.AIR, 1);
     public final static ItemStack diamond = result_LongType(Material.DIAMOND, 1, Color.chat("&c&l&oStart!"));
     public final static ItemStack yellowGlass = result_NameType(Material.YELLOW_STAINED_GLASS_PANE, 1, Color.chat("&a&o&l강화중.."));
-
 }

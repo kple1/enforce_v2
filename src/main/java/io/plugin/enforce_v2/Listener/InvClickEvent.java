@@ -1,14 +1,20 @@
 package io.plugin.enforce_v2.Listener;
 
+import io.plugin.enforce_v2.Data.UserData;
 import io.plugin.enforce_v2.Main;
 import io.plugin.enforce_v2.Utils.Color;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.List;
+import java.util.Map;
 
 public class InvClickEvent implements Listener {
 
@@ -17,6 +23,7 @@ public class InvClickEvent implements Listener {
     @EventHandler
     public void invClickEvent(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
+
         if (!event.getView().getTitle().equals("강화")) {
             return;
         }
@@ -52,13 +59,52 @@ public class InvClickEvent implements Listener {
         }
 
         if (event.getSlot() == 14) {
+            YamlConfiguration config = UserData.getPlayerConfig(player);
+            //Enchantment enchantment = event.getView().getItem(10).getEnchantments().entrySet().iterator().next().getKey();
+            int level = 0;
+            Map<Enchantment, Integer> enchantments = event.getView().getItem(10).getEnchantments();
+            if (!enchantments.isEmpty()) {
+                level = enchantments.entrySet().iterator().next().getValue();
+            }
+            //String enchantmentString = enchantment.getName() + ":" + level;
+
+            List<String> originalLore = event.getView().getItem(12).getItemMeta().getLore();
+            int maxEnchantmentLevel = 0;
+            Map<Enchantment, Integer> enchantments1 = event.getView().getItem(12).getEnchantments();
+            if (!enchantments1.isEmpty()) {
+                maxEnchantmentLevel = enchantments1.entrySet().iterator().next().getValue();
+            }
+            //int percent = -1;
+
+            /*if (originalLore != null) {
+                for (String lore : originalLore) {
+                    if (lore.contains("최대 강화 : ")) {
+                        String numericPart = lore.replaceAll("[^0-9]", "");
+                        maxEnchantmentLevel = Integer.parseInt(numericPart);
+                        break;
+                    }*/
+                //}
+
+                /*for (String lore : originalLore) {
+                    if (lore.contains("&a강화 성공 확률 : ")) {
+                        String numericPart = lore.replaceAll("[^0-9]", "");
+                        percent = Integer.parseInt(numericPart);
+                        break;
+                    }
+                }*/
+            //}
+
+            config.set("itemInfo.1.level", level);
+            config.set("itemInfo.2.level", maxEnchantmentLevel);
+//          config.set("itemInfo.2.percent", percent);
+            Main.getPlugin().saveYamlConfiguration();
+
             ItemStack itemInSlot10 = event.getView().getItem(10);
             ItemStack itemInSlot12 = event.getView().getItem(12);
             if (itemInSlot10 == null || itemInSlot12 == null) {
                 player.sendMessage(title + "강화할 도구 또는 사용권을 배치 해주세요.");
                 return;
             }
-
             ItemMeta itemMeta = itemInSlot10.getItemMeta();
             if (itemMeta != null) {
                 Material itemType = itemInSlot10.getType();
@@ -69,8 +115,14 @@ public class InvClickEvent implements Listener {
                         || itemType == Material.LEATHER_LEGGINGS || itemType == Material.GOLDEN_LEGGINGS || itemType == Material.DIAMOND_BOOTS
                         || itemType == Material.IRON_BOOTS || itemType == Material.LEATHER_BOOTS || itemType == Material.GOLDEN_BOOTS
                         || itemType == Material.DIAMOND_HELMET || itemType == Material.IRON_HELMET || itemType == Material.LEATHER_HELMET
-                        || itemType == Material.GOLDEN_HELMET)) {
-                    player.sendMessage(title + "도구의 아이템 정보를 불러올 수 없습니다.");
+                        || itemType == Material.GOLDEN_HELMET || itemType == Material.DIAMOND_PICKAXE || itemType == Material.IRON_PICKAXE
+                        || itemType == Material.GOLDEN_PICKAXE || itemType == Material.WOODEN_PICKAXE || itemType == Material.DIAMOND_AXE
+                        || itemType == Material.IRON_AXE || itemType == Material.GOLDEN_AXE || itemType == Material.WOODEN_AXE
+                        || itemType == Material.DIAMOND_SHOVEL || itemType == Material.IRON_SHOVEL || itemType == Material.GOLDEN_SHOVEL
+                        || itemType == Material.WOODEN_SHOVEL || itemType == Material.DIAMOND_HOE || itemType == Material.IRON_HOE
+                        || itemType == Material.GOLDEN_HOE || itemType == Material.WOODEN_HOE || itemType == Material.ELYTRA
+                        || itemType == Material.FISHING_ROD)) {
+                player.sendMessage(title + "도구의 아이템 정보를 불러올 수 없습니다.");
                     return;
                 }
 
@@ -79,7 +131,20 @@ public class InvClickEvent implements Listener {
                     player.sendMessage(title + "사용권의 아이템 정보를 불러올 수 없습니다.");
                     return;
                 }
-                Main.getPlugin().startTimer(event.getInventory(), event);
+
+                int getLevel1 = config.getInt("itemInfo.1.level");
+                int getLevel2 = config.getInt("itemInfo.2.level");
+                if (!(getLevel1 - getLevel2 == -1)) {
+                    player.sendMessage(title + "아이템 레벨격차가 맞지 않습니다.");
+                    return;
+                }
+
+                for (int i = 0; i < 36; i++) {
+                    if (event.getRawSlot() == i) {
+                        event.setCancelled(true);
+                    }
+                }
+                Main.getPlugin().startTimer(event.getInventory(), event); //결과 도출
             }
         }
     }
