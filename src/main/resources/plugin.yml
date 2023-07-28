@@ -15,3 +15,6 @@ commands:
 
   enforceAnvilCreate:
     aliases: "강화모루"
+
+  test:
+    aliases: "테스트"

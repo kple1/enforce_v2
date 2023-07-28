@@ -15,6 +15,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InvClickEvent implements Listener {
 
@@ -51,8 +53,14 @@ public class InvClickEvent implements Listener {
         YamlConfiguration config = UserData.getPlayerConfig(player);
         int getLock = config.getInt("Lock");
         for (int i = 0; i < 36; i++) {
-            if (getLock == 0 && i == 10 || i == 12 || i == 16) {
-                continue;
+            if (getLock == 0) {
+                if (i == 10 || i == 12 || i == 16) {
+                    continue;
+                }
+            } else {
+                player.sendMessage(title + "강화도중에는 아이템을 꺼낼 수 없습니다.");
+                event.setCancelled(true);
+                break;
             }
 
             if (event.getRawSlot() == i) {
@@ -61,6 +69,7 @@ public class InvClickEvent implements Listener {
         }
 
         if (event.getSlot() == 14) {
+            //enchant level 얻어오기
             int level = 0;
             Map<Enchantment, Integer> enchantments = event.getView().getItem(10).getEnchantments();
             if (!enchantments.isEmpty()) {
@@ -73,15 +82,40 @@ public class InvClickEvent implements Listener {
                 maxEnchantmentLevel = enchantments1.entrySet().iterator().next().getValue();
             }
 
+            //최대레벨 저장
+            int num = 0;
+            int percent = 0;
+            String pattern = "\\d+";
+            Pattern p = Pattern.compile(pattern);
+
+            String lore = event.getView().getItem(12).getItemMeta().getLore().toString();
+            Matcher matcher = p.matcher(lore);
+
+            String numericPartLevel = "";
+            String numericPartPercent = "";
+
+            if (matcher.find()) {
+                numericPartLevel = matcher.group();
+            }
+
+            if (matcher.find()) {
+                numericPartPercent = matcher.group();
+            }
+
+            num = Integer.parseInt(numericPartLevel);
+            percent = Integer.parseInt(numericPartPercent);
+
+            //data save map으로 가능하지만 눈으로 볼 수 있는 도구가 필요 했음
             config.set("itemInfo.1.level", level);
             config.set("itemInfo.2.level", maxEnchantmentLevel);
-            //config.set("itemInfo.2.percent", percent);
+            config.set("itemInfo.2.maxLevel", num);
+            config.set("itemInfo.2.percent", percent);
             Main.getPlugin().saveYamlConfiguration();
 
             ItemStack itemInSlot10 = event.getView().getItem(10);
             ItemStack itemInSlot12 = event.getView().getItem(12);
             if (itemInSlot10 == null || itemInSlot12 == null) {
-                player.sendMessage(title + "강화할 도구 또는 사용권을 배치 해주세요.");
+                player.sendMessage(title + "강화할 도구 또는 사용권을 배치해주세요.");
                 return;
             }
             ItemMeta itemMeta = itemInSlot10.getItemMeta();
@@ -114,16 +148,25 @@ public class InvClickEvent implements Listener {
                 int getLevel1 = config.getInt("itemInfo.1.level");
                 int getLevel2 = config.getInt("itemInfo.2.level");
                 if (!(getLevel1 - getLevel2 == -1)) {
-                    player.sendMessage(title + "아이템 레벨격차가 맞지 않습니다.");
+                    player.sendMessage(title + "아이템 레벨격차가 맞지않습니다.");
                     return;
                 }
 
+                //최대레벨 제한
+                int getOneSlotLevel = config.getInt("itemInfo.1.level");
+                int getTwoSlotLevel = config.getInt("itemInfo.2.maxLevel");
+                if (getOneSlotLevel == getTwoSlotLevel) {
+                    player.sendMessage(title + "최대레벨에 도달했습니다!");
+                    return;
+                }
+
+                //강화가 진행중인데도 버튼을 누름을 방지하기 위한 Lock
                 if (getLock == 1) {
-                    player.sendMessage(title + "강화가 진행 중 입니다!");
+                    player.sendMessage(title + "강화가 진행 중입니다!");
                     return;
                 }
 
-                Main.getPlugin().startTimer(event.getInventory(), event); //결과 도출
+                Main.getPlugin().startTimer(event.getInventory(), event, player); //결과 도출
 
                 config.set("Lock", 1);
                 Main.getPlugin().saveYamlConfiguration();

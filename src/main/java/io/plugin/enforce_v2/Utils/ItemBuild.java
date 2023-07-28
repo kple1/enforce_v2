@@ -36,7 +36,7 @@ public class ItemBuild {
         ItemStack stack = new ItemStack(type, amount);
         ItemMeta meta = stack.getItemMeta();
         meta.setDisplayName(displayName);
-        meta.addEnchant(enchantment, level, false);
+        meta.addEnchant(enchantment, level, true);
         stack.setItemMeta(meta);
         return stack;
     }
@@ -46,6 +46,15 @@ public class ItemBuild {
         ItemMeta itemMeta = giveItem.getItemMeta();
         itemMeta.setLore(Arrays.asList(Color.chat("최대 강화 : " + level),
                 Color.chat("&a강화 성공 확률 : " + percentage + "%")));
+        giveItem.setItemMeta(itemMeta);
+        player.getInventory().addItem(giveItem);
+        return null;
+    }
+
+    public static ItemStack give(Player player) {
+        ItemStack giveItem = result_EnchantType(Material.DIAMOND_SWORD, 1, (Color.chat("&b&o&l강화책")), Enchantment.DAMAGE_ALL, 6);
+        ItemMeta itemMeta = giveItem.getItemMeta();
+        itemMeta.setDisplayName(Color.chat("&f[&d&l6강&f] 다이아몬드 검"));
         giveItem.setItemMeta(itemMeta);
         player.getInventory().addItem(giveItem);
         return null;
