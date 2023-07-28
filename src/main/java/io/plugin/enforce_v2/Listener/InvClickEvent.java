@@ -48,8 +48,10 @@ public class InvClickEvent implements Listener {
             return;
         }
 
+        YamlConfiguration config = UserData.getPlayerConfig(player);
+        int getLock = config.getInt("Lock");
         for (int i = 0; i < 36; i++) {
-            if (i == 10 || i == 12 || i == 16) {
+            if (getLock == 0 && i == 10 || i == 12 || i == 16) {
                 continue;
             }
 
@@ -59,44 +61,21 @@ public class InvClickEvent implements Listener {
         }
 
         if (event.getSlot() == 14) {
-            YamlConfiguration config = UserData.getPlayerConfig(player);
-            //Enchantment enchantment = event.getView().getItem(10).getEnchantments().entrySet().iterator().next().getKey();
             int level = 0;
             Map<Enchantment, Integer> enchantments = event.getView().getItem(10).getEnchantments();
             if (!enchantments.isEmpty()) {
                 level = enchantments.entrySet().iterator().next().getValue();
             }
-            //String enchantmentString = enchantment.getName() + ":" + level;
 
-            List<String> originalLore = event.getView().getItem(12).getItemMeta().getLore();
             int maxEnchantmentLevel = 0;
             Map<Enchantment, Integer> enchantments1 = event.getView().getItem(12).getEnchantments();
             if (!enchantments1.isEmpty()) {
                 maxEnchantmentLevel = enchantments1.entrySet().iterator().next().getValue();
             }
-            //int percent = -1;
-
-            /*if (originalLore != null) {
-                for (String lore : originalLore) {
-                    if (lore.contains("최대 강화 : ")) {
-                        String numericPart = lore.replaceAll("[^0-9]", "");
-                        maxEnchantmentLevel = Integer.parseInt(numericPart);
-                        break;
-                    }*/
-                //}
-
-                /*for (String lore : originalLore) {
-                    if (lore.contains("&a강화 성공 확률 : ")) {
-                        String numericPart = lore.replaceAll("[^0-9]", "");
-                        percent = Integer.parseInt(numericPart);
-                        break;
-                    }
-                }*/
-            //}
 
             config.set("itemInfo.1.level", level);
             config.set("itemInfo.2.level", maxEnchantmentLevel);
-//          config.set("itemInfo.2.percent", percent);
+            //config.set("itemInfo.2.percent", percent);
             Main.getPlugin().saveYamlConfiguration();
 
             ItemStack itemInSlot10 = event.getView().getItem(10);
@@ -122,7 +101,7 @@ public class InvClickEvent implements Listener {
                         || itemType == Material.WOODEN_SHOVEL || itemType == Material.DIAMOND_HOE || itemType == Material.IRON_HOE
                         || itemType == Material.GOLDEN_HOE || itemType == Material.WOODEN_HOE || itemType == Material.ELYTRA
                         || itemType == Material.FISHING_ROD)) {
-                player.sendMessage(title + "도구의 아이템 정보를 불러올 수 없습니다.");
+                    player.sendMessage(title + "도구의 아이템 정보를 불러올 수 없습니다.");
                     return;
                 }
 
@@ -139,12 +118,15 @@ public class InvClickEvent implements Listener {
                     return;
                 }
 
-                for (int i = 0; i < 36; i++) {
-                    if (event.getRawSlot() == i) {
-                        event.setCancelled(true);
-                    }
+                if (getLock == 1) {
+                    player.sendMessage(title + "강화가 진행 중 입니다!");
+                    return;
                 }
+
                 Main.getPlugin().startTimer(event.getInventory(), event); //결과 도출
+
+                config.set("Lock", 1);
+                Main.getPlugin().saveYamlConfiguration();
             }
         }
     }

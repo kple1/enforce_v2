@@ -7,6 +7,7 @@ import io.plugin.enforce_v2.Command.StatEnforceTicketCreate;
 import io.plugin.enforce_v2.Listener.AnvilClick;
 import io.plugin.enforce_v2.Listener.AnvilSet;
 import io.plugin.enforce_v2.Listener.InvClickEvent;
+import io.plugin.enforce_v2.Listener.InvCloseEvent;
 import io.plugin.enforce_v2.Utils.Color;
 import io.plugin.enforce_v2.Utils.ItemBuild;
 import org.bukkit.Bukkit;
@@ -21,6 +22,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static io.plugin.enforce_v2.Data.UserData.config;
 import static io.plugin.enforce_v2.Data.UserData.playerFile;
@@ -43,6 +49,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new AnvilSet(), this);
         Bukkit.getPluginManager().registerEvents(new AnvilClick(), this);
         Bukkit.getPluginManager().registerEvents(new InvClickEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new InvCloseEvent(), this);
     }
 
     @Override
@@ -82,14 +89,44 @@ public final class Main extends JavaPlugin {
     }
 
     public void setItemIsEnd(InventoryClickEvent event) {
+        //displayName Change
+        int num = 0;
         ItemStack itemStack = event.getView().getItem(10);
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(Color.chat("&f[&d&l1강&f] 다이아몬드 검"));
-        itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 2, false);
+        String displayName = itemMeta.getDisplayName();
+
+        String pattern = "\\d+";
+        Pattern p = Pattern.compile(pattern);
+        Matcher matcher = p.matcher(displayName);
+
+        if (matcher.find()) {
+            String numericPart = matcher.group();
+            num = Integer.parseInt(numericPart);
+            num = num + 1;
+        } else {
+            num = 1;
+        }
+
+        //enchantLevel Change
+        int enchantLevel = 0;
+        Map<Enchantment, Integer> enchantments = event.getView().getItem(12).getEnchantments();
+        if (!enchantments.isEmpty()) {
+            enchantLevel = enchantments.entrySet().iterator().next().getValue();
+        }
+
+        //enchant Change
+        itemMeta.setDisplayName(Color.chat("&f[&d&l" + num + "강&f] 다이아몬드 검"));
+        Map<Enchantment, Integer> getEnchantments = event.getView().getItem(12).getEnchantments();
+
+        for (Map.Entry<Enchantment, Integer> entry : getEnchantments.entrySet()) {
+            Enchantment enchantment = entry.getKey();
+            int level = entry.getValue();
+            itemMeta.addEnchant(enchantment, level, false);
+        }
         itemStack.setItemMeta(itemMeta);
-
+        //결과 도출
         event.getView().setItem(16, itemStack);
-
+        //강화가 완료됨. 10, 12슬롯 삭제
         if (event.getView().getItem(16) != null) {
             event.getView().setItem(10, ItemBuild.AIR);
             event.getView().setItem(12, ItemBuild.AIR);
