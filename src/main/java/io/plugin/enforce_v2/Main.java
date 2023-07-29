@@ -92,22 +92,22 @@ public final class Main extends JavaPlugin {
         int num = 0;
         ItemStack itemStack = event.getView().getItem(10);
         ItemMeta itemMeta = itemStack.getItemMeta();
-        String displayName = itemMeta.getDisplayName();
+        //String displayName = itemMeta.getDisplayName();
 
-        String pattern = "\\d+";
+        /* String pattern = "\\d+";
         Pattern p = Pattern.compile(pattern);
-        Matcher matcher = p.matcher(displayName);
+        Matcher matcher = p.matcher(displayName);*/
 
-        if (matcher.find()) {
+        /*if (matcher.find()) {
             String numericPart = matcher.group();
             num = Integer.parseInt(numericPart);
             num = num + 1;
         } else {
             num = 1;
-        }
+        }*/
 
         //enchant Change
-        itemMeta.setDisplayName(Color.chat("&f[&d&l" + num + "강&f] 다이아몬드 검"));
+        //itemMeta.setDisplayName(Color.chat("&f[&d&l" + num + "강&f] " + displayName));
         Map<Enchantment, Integer> getEnchantments = event.getView().getItem(12).getEnchantments();
 
         for (Map.Entry<Enchantment, Integer> entry : getEnchantments.entrySet()) {
@@ -147,8 +147,7 @@ public final class Main extends JavaPlugin {
             }
         } else {
             player.sendMessage(title + "강화에 실패 하셨습니다");
-            event.getView().setItem(10, ItemBuild.AIR);
-            event.getView().setItem(12, ItemBuild.AIR);
+            event.getView().setItem(16, ItemBuild.backUp(event));
         }
 
         //강화가 완료됨. 10, 12슬롯 삭제

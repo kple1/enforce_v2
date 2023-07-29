@@ -3,6 +3,7 @@ package io.plugin.enforce_v2.Utils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -59,6 +60,15 @@ public class ItemBuild {
         player.getInventory().addItem(giveItem);
         return null;
     }
+
+    public static ItemStack backUp(InventoryClickEvent event) {
+        ItemStack itemToBackup = event.getView().getItem(10);
+        event.getView().setItem(16, itemToBackup);
+        event.getView().setItem(10, ItemBuild.AIR);
+        event.getView().setItem(12, ItemBuild.AIR);
+        return itemToBackup;
+    }
+
 
     public final static ItemStack anvil = result_LongType(Material.ANVIL, 1, (Color.chat("&7[ 강화전용 모루 ]")),
             Color.chat("특수판별 코드 : 0a"));

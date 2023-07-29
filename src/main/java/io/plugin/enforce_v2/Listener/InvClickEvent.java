@@ -13,7 +13,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -106,6 +105,9 @@ public class InvClickEvent implements Listener {
             percent = Integer.parseInt(numericPartPercent);
 
             //data save map으로 가능하지만 눈으로 볼 수 있는 도구가 필요 했음
+            ItemStack itemStack = event.getView().getItem(10);
+            ItemMeta itemMeta10Slot = itemStack.getItemMeta();
+
             config.set("itemInfo.1.level", level);
             config.set("itemInfo.2.level", maxEnchantmentLevel);
             config.set("itemInfo.2.maxLevel", num);
