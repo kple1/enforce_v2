@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.Map;
 
 public class ItemBuild {
 
@@ -63,6 +64,16 @@ public class ItemBuild {
 
     public static ItemStack backUp(InventoryClickEvent event) {
         ItemStack itemToBackup = event.getView().getItem(10);
+        ItemMeta itemToBackUpMeta = itemToBackup.getItemMeta();
+        Map<Enchantment, Integer> getEnchantments = event.getView().getItem(10).getEnchantments();
+
+        for (Map.Entry<Enchantment, Integer> entry : getEnchantments.entrySet()) {
+            Enchantment enchantment = entry.getKey();
+            int level = entry.getValue();
+            itemToBackUpMeta.addEnchant(enchantment, level - 1, true);
+        }
+        itemToBackup.setItemMeta(itemToBackUpMeta);
+
         event.getView().setItem(16, itemToBackup);
         event.getView().setItem(10, ItemBuild.AIR);
         event.getView().setItem(12, ItemBuild.AIR);

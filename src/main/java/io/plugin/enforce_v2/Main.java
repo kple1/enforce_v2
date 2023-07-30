@@ -22,8 +22,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static io.plugin.enforce_v2.Data.UserData.config;
 import static io.plugin.enforce_v2.Data.UserData.playerFile;
@@ -32,6 +30,7 @@ public final class Main extends JavaPlugin {
 
     public static Main plugin;
     private int taskId;
+    private int taskId1;
     private File uuidFolder;
     String title = Color.chat("&f[ &c&l강화 &f] ");
 
@@ -61,7 +60,7 @@ public final class Main extends JavaPlugin {
         return plugin;
     }
 
-    public void startTimer(Inventory inv, InventoryClickEvent event, Player player) {
+    public void startTimerClick14SlotNormalEnchant(Inventory inv, InventoryClickEvent event, Player player) {
         taskId = new BukkitRunnable() {
             int time = 1;
 
@@ -123,7 +122,8 @@ public final class Main extends JavaPlugin {
             event.getView().setItem(16, itemStack);
             player.sendMessage(title + "강화에 성공 하셨습니다!");
 
-            int slot16Num = 0;
+            //아래 주석은 스텟강화 성공메시지에 쓰임.
+            /*int slot16Num = 0;
 
             ItemStack itemStack1 = event.getView().getItem(16);
             ItemMeta itemMeta1 = itemStack1.getItemMeta();
@@ -144,7 +144,7 @@ public final class Main extends JavaPlugin {
                         }
                     }
                 }
-            }
+            }*/
         } else {
             player.sendMessage(title + "강화에 실패 하셨습니다");
             event.getView().setItem(16, ItemBuild.backUp(event));
