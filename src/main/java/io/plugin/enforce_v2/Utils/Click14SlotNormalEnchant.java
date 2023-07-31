@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -109,9 +110,38 @@ public class Click14SlotNormalEnchant {
 
             int getLevel1 = config.getInt("itemInfo.1.level");
             int getLevel2 = config.getInt("itemInfo.2.level");
-            if (!(getLevel1 - getLevel2 == -1)) {
-                player.sendMessage(title + "아이템 레벨격차가 맞지않습니다.");
-                return;
+            int twoEnchantCheck = config.getInt("checkTwoEnchant");
+
+            if (enchantments.size() >= 2) {
+                config.set("checkTwoEnchant", 1);
+            } else {
+                config.set("checkTwoEnchant", 0);
+            }
+
+            Map<Enchantment, Integer> item10Enchants = itemInSlot10.getItemMeta().getEnchants();
+            for (Enchantment enchantment : item10Enchants.keySet()) {
+                String enchantName = enchantment.getKey().getKey();
+                config.set("itemInfo.1.anotherEnchant." + enchantName, item10Enchants.get(enchantment));
+            }
+            Main.getPlugin().saveYamlConfiguration();
+
+            Map<Enchantment, Integer> item12Enchants = itemInSlot12.getItemMeta().getEnchants();
+            for (Enchantment enchantment : item12Enchants.keySet()) {
+                String enchantName = enchantment.getKey().getKey();
+                config.set("itemInfo.2.anotherEnchant." + enchantName, item12Enchants.get(enchantment));
+            }
+            Main.getPlugin().saveYamlConfiguration();
+
+            String anotherEnchantSlot10 = config.getString("itemInfo.1.anotherEnchant");
+            String anotherEnchantSlot12 = config.getString("itemInfo.2.anotherEnchant");
+
+            if (Objects.equals(anotherEnchantSlot10, anotherEnchantSlot12)) {
+                if (twoEnchantCheck == 0) {
+                    if (!(getLevel1 - getLevel2 == -1)) {
+                        player.sendMessage(title + "아이템 레벨격차가 맞지않습니다.");
+                        return;
+                    }
+                }
             }
 
             //최대레벨 제한

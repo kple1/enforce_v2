@@ -19,6 +19,8 @@ public class InvCloseEvent implements Listener {
         Player player = (Player) event.getPlayer();
         YamlConfiguration config = UserData.getPlayerConfig(player);
         config.set("Lock", 0);
+        config.set("itemInfo.1.anotherEnchant", null);
+        config.set("itemInfo.2.anotherEnchant", null);
         Main.getPlugin().saveYamlConfiguration();
     }
 }

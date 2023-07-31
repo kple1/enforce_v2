@@ -22,6 +22,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static io.plugin.enforce_v2.Data.UserData.config;
 import static io.plugin.enforce_v2.Data.UserData.playerFile;
@@ -30,7 +32,6 @@ public final class Main extends JavaPlugin {
 
     public static Main plugin;
     private int taskId;
-    private int taskId1;
     private File uuidFolder;
     String title = Color.chat("&f[ &c&l강화 &f] ");
 
@@ -86,27 +87,17 @@ public final class Main extends JavaPlugin {
         }.runTaskTimer(this, 0, 20).getTaskId(); // 1초마다 실행
     }
 
+    private String getItemName(ItemStack item) {
+        String itemName = item.getType().toString().toLowerCase();
+        return itemName.replace("", "");
+    }
+
     public void setItemIsEnd(InventoryClickEvent event, Player player) {
-        //displayName Change
-        int num = 0;
         ItemStack itemStack = event.getView().getItem(10);
         ItemMeta itemMeta = itemStack.getItemMeta();
-        //String displayName = itemMeta.getDisplayName();
 
-        /* String pattern = "\\d+";
-        Pattern p = Pattern.compile(pattern);
-        Matcher matcher = p.matcher(displayName);*/
+        itemMeta.setDisplayName(Color.chat("&f[&d&l마법&f] " + getItemName(itemStack)));
 
-        /*if (matcher.find()) {
-            String numericPart = matcher.group();
-            num = Integer.parseInt(numericPart);
-            num = num + 1;
-        } else {
-            num = 1;
-        }*/
-
-        //enchant Change
-        //itemMeta.setDisplayName(Color.chat("&f[&d&l" + num + "강&f] " + displayName));
         Map<Enchantment, Integer> getEnchantments = event.getView().getItem(12).getEnchantments();
 
         for (Map.Entry<Enchantment, Integer> entry : getEnchantments.entrySet()) {
@@ -122,8 +113,7 @@ public final class Main extends JavaPlugin {
             event.getView().setItem(16, itemStack);
             player.sendMessage(title + "강화에 성공 하셨습니다!");
 
-            //아래 주석은 스텟강화 성공메시지에 쓰임.
-            /*int slot16Num = 0;
+            int slot16Num = 0;
 
             ItemStack itemStack1 = event.getView().getItem(16);
             ItemMeta itemMeta1 = itemStack1.getItemMeta();
@@ -136,15 +126,13 @@ public final class Main extends JavaPlugin {
             if (matcher1.find()) {
                 String numericPart = matcher1.group();
                 slot16Num = Integer.parseInt(numericPart);
-                for (int i = 5; i < 8; i++) {
-                    if (slot16Num == i) {
-                        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                            onlinePlayer.sendMessage(Color.chat(title + "&l&a" +player.getName() + "&f님이 " + Integer.parseInt(String.valueOf(i + 1)) + "강 강화에 성공하셨습니다."));
-                            break;
-                        }
+                if (slot16Num == 7) {
+                    for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                        onlinePlayer.sendMessage(Color.chat(title + "&l&a" + player.getName() + "&f님이 7강 강화에 성공하셨습니다."));
+                        break;
                     }
                 }
-            }*/
+            }
         } else {
             player.sendMessage(title + "강화에 실패 하셨습니다");
             event.getView().setItem(16, ItemBuild.backUp(event));

@@ -6,10 +6,14 @@ import io.plugin.enforce_v2.Utils.Click14SlotStatEnforce;
 import io.plugin.enforce_v2.Utils.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Map;
 
 public class InvClickEvent implements Listener {
 
