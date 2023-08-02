@@ -6,6 +6,7 @@ import io.plugin.enforce_v2.Listener.*;
 import io.plugin.enforce_v2.Utils.Color;
 import io.plugin.enforce_v2.Utils.ItemBuild;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -64,6 +65,7 @@ public final class Main extends JavaPlugin {
             public void run() {
                 if (time >= 1 && time <= 9) {
                     inv.setItem(26 + time, ItemBuild.yellowGlass);
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 10, 1);
                 }
 
                 if (time == 9) {
@@ -107,6 +109,7 @@ public final class Main extends JavaPlugin {
         if (Math.random() < probability) {
             event.getView().setItem(16, itemStack);
             player.sendMessage(title + "강화에 성공 하셨습니다!");
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
             int slot16Num = 0;
 
@@ -131,6 +134,7 @@ public final class Main extends JavaPlugin {
         } else {
             player.sendMessage(title + "강화에 실패 하셨습니다");
             event.getView().setItem(16, ItemBuild.backUp(event));
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
         }
 
         //강화가 완료됨. 10, 12슬롯 삭제
