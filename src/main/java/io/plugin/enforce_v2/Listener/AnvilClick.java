@@ -23,10 +23,6 @@ public class AnvilClick implements Listener {
 
         if (event.getClickedBlock().getType() != Material.ANVIL) return;
 
-        if (event.getClickedBlock().getX() != plugin.getConfig().getInt("모루인식.X") ||
-                event.getClickedBlock().getY() != plugin.getConfig().getInt("모루인식.Y") ||
-                event.getClickedBlock().getZ() != plugin.getConfig().getInt("모루인식.Z")) return;
-
         event.setCancelled(true);
         this.customInventory = Bukkit.createInventory(null, 36, "강화");
         for (int i = 0; i < 36; i++) {

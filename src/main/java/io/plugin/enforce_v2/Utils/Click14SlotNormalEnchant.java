@@ -140,7 +140,7 @@ public class Click14SlotNormalEnchant {
             String anotherEnchantSlot10 = config.getString("itemInfo.1.anotherEnchant");
             String anotherEnchantSlot12 = config.getString("itemInfo.2.anotherEnchant");
 
-            if (Objects.equals(anotherEnchantSlot10, anotherEnchantSlot12)) {
+            if (Objects.equals(anotherEnchantSlot10, anotherEnchantSlot12) || anotherEnchantSlot10 == null) {
                 if (twoEnchantCheck == 0) {
                     if (!(getLevel1 - getLevel2 == -1)) {
                         player.sendMessage(title + "아이템 레벨격차가 맞지않습니다.");

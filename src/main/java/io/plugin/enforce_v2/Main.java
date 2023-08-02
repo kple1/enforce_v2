@@ -39,7 +39,7 @@ public final class Main extends JavaPlugin {
     }
 
     public void Listener() {
-        Bukkit.getPluginManager().registerEvents(new AnvilSet(), this);
+        //Bukkit.getPluginManager().registerEvents(new AnvilSet(), this);
         Bukkit.getPluginManager().registerEvents(new AnvilClick(), this);
         Bukkit.getPluginManager().registerEvents(new InvClickEvent(), this);
         Bukkit.getPluginManager().registerEvents(new InvCloseEvent(), this);
