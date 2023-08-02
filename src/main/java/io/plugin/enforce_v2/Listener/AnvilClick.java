@@ -10,8 +10,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
-import static io.plugin.enforce_v2.Main.plugin;
-
 public class AnvilClick implements Listener {
 
     private Inventory customInventory;
