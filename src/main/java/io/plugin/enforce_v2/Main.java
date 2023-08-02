@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -135,8 +136,15 @@ public final class Main extends JavaPlugin {
         //강화가 완료됨. 10, 12슬롯 삭제
         if (event.getView().getItem(16) != null) {
             event.getView().setItem(10, ItemBuild.AIR);
-            event.getView().setItem(12, ItemBuild.AIR);
+            removeItemsFromMainHand(event, 1);
         }
+    }
+
+    public ItemStack removeItemsFromMainHand(InventoryClickEvent event, int amountToRemove) {
+        ItemStack itemToRemove = event.getInventory().getItem(12).clone();
+        itemToRemove.setAmount(amountToRemove);
+        event.getInventory().removeItem(itemToRemove);
+        return itemToRemove;
     }
 
     public File getUuidFolder() {

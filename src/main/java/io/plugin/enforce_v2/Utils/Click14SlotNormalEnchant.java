@@ -109,6 +109,20 @@ public class Click14SlotNormalEnchant {
                 return;
             }
 
+            Map<Enchantment, Integer> item10Enchants = itemInSlot10.getItemMeta().getEnchants();
+            for (Enchantment enchantment : item10Enchants.keySet()) {
+                String enchantName = enchantment.getKey().getKey();
+                config.set("itemInfo.1.anotherEnchant", enchantName);
+            }
+            Main.getPlugin().saveYamlConfiguration();
+
+            Map<Enchantment, Integer> item12Enchants = itemInSlot12.getItemMeta().getEnchants();
+            for (Enchantment enchantment : item12Enchants.keySet()) {
+                String enchantName = enchantment.getKey().getKey();
+                config.set("itemInfo.2.anotherEnchant", enchantName);
+            }
+            Main.getPlugin().saveYamlConfiguration();
+
             int getLevel1 = config.getInt("itemInfo.1.level");
             int getLevel2 = config.getInt("itemInfo.2.level");
             int twoEnchantCheck = config.getInt("checkTwoEnchant");
@@ -122,20 +136,6 @@ public class Click14SlotNormalEnchant {
             } else {
                 config.set("checkTwoEnchant", 0);
             }
-
-            Map<Enchantment, Integer> item10Enchants = itemInSlot10.getItemMeta().getEnchants();
-            for (Enchantment enchantment : item10Enchants.keySet()) {
-                String enchantName = enchantment.getKey().getKey();
-                config.set("itemInfo.1.anotherEnchant." + enchantName, item10Enchants.get(enchantment));
-            }
-            Main.getPlugin().saveYamlConfiguration();
-
-            Map<Enchantment, Integer> item12Enchants = itemInSlot12.getItemMeta().getEnchants();
-            for (Enchantment enchantment : item12Enchants.keySet()) {
-                String enchantName = enchantment.getKey().getKey();
-                config.set("itemInfo.2.anotherEnchant." + enchantName, item12Enchants.get(enchantment));
-            }
-            Main.getPlugin().saveYamlConfiguration();
 
             String anotherEnchantSlot10 = config.getString("itemInfo.1.anotherEnchant");
             String anotherEnchantSlot12 = config.getString("itemInfo.2.anotherEnchant");
