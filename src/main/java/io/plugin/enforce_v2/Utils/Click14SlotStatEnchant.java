@@ -1,10 +1,10 @@
+/*
 package io.plugin.enforce_v2.Utils;
 
 import io.plugin.enforce_v2.Data.UserData;
 import io.plugin.enforce_v2.Main;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -21,7 +21,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Click14SlotStatEnforce {
+public class Click14SlotStatEnchant {
 
     String title = Color.chat("&f[ &c&l강화 &f] ");
     private int taskId;
@@ -29,6 +29,7 @@ public class Click14SlotStatEnforce {
     public void statEnforce(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
 
+        //스텟권 감지
         ItemStack Slot12Item = event.getView().getItem(12);
         for (int i = 0; i < 7; i++) {
             if (!(Slot12Item != null && Slot12Item.hasItemMeta() && Slot12Item.getItemMeta().getDisplayName().equals("스텟강화권"))) {
@@ -36,6 +37,7 @@ public class Click14SlotStatEnforce {
             }
         }
 
+        //2차 강화 여부
         ItemStack item = event.getView().getItem(10);
         if (item != null && item.hasItemMeta() && item.getItemMeta().hasEnchants()) {
             Map<Enchantment, Integer> enchantments = item.getItemMeta().getEnchants();
@@ -76,11 +78,12 @@ public class Click14SlotStatEnforce {
                 }
                 time++;
             }
-        }.runTaskTimer(Main.getPlugin(), 0, 20).getTaskId();
+        }.runTaskTimer(Main.getPlugin(), 0, 20).getTaskId(); // 1초마다 실행
     }
 
     private final int defaultProbability = 50;
 
+    // 확률에 따른 강 수를 반환하는 함수
     private int getLectureNumber(String displayName) {
         int lectureNumber = 0;
         StringBuilder numberString = new StringBuilder();
@@ -127,7 +130,8 @@ public class Click14SlotStatEnforce {
         }
     }
 
-    /*private void modifyArmor(ItemStack item, double statIncrease) {
+    */
+/*private void modifyArmor(ItemStack item, double statIncrease) {
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta == null) return;
 
@@ -141,34 +145,41 @@ public class Click14SlotStatEnforce {
         itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR, newModifier);
 
         item.setItemMeta(itemMeta);
-    }*/
+    }*//*
+
 
     private void modifyWeapon(ItemStack item, double statIncrease, Player player) {
         ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta == null) return; else { player.sendMessage("itemMeta is null"); }
-
-        double currentDamage = 0;
-        Collection<AttributeModifier> existingDamageModifier = item.getItemMeta().getAttributeModifiers(Attribute.GENERIC_ATTACK_DAMAGE);
-        if (existingDamageModifier != null) {
-            currentDamage = existingDamageModifier.size();
-            player.sendMessage(String.valueOf(currentDamage));
-        } else {
-            player.sendMessage("existingDamageModifier is null");
+        if (itemMeta == null) {
+            player.sendMessage("itemMeta is null");
+            return;
         }
 
-        AttributeModifier newDamageModifier = new AttributeModifier(UUID.randomUUID(), "CustomDamage", currentDamage + statIncrease, AttributeModifier.Operation.ADD_NUMBER);
+        double currentDamage = 0.0;
+        Collection<AttributeModifier> attackModifiers = itemMeta.getAttributeModifiers(Attribute.GENERIC_ATTACK_DAMAGE);
+        if (attackModifiers != null) {
+            for (AttributeModifier modifier : attackModifiers) {
+                currentDamage = modifier.getAmount();
+            }
+        } else {
+            player.sendMessage("attackModifiers is null");
+        }
+        player.sendMessage(String.valueOf(currentDamage));
+
+        AttributeModifier newDamageModifier = new AttributeModifier(UUID.randomUUID(), "generic.attack_damage", currentDamage + statIncrease, AttributeModifier.Operation.ADD_NUMBER);
         itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, newDamageModifier);
 
-        double currentSpeed = 4.0;
-        AttributeModifier existingSpeedModifier = (AttributeModifier) itemMeta.getAttributeModifiers(Attribute.GENERIC_ATTACK_SPEED);
-        if (existingSpeedModifier != null) {
-            currentSpeed = existingSpeedModifier.getAmount();
-            player.sendMessage(String.valueOf(currentSpeed));
+        double currentSpeed = 0.0;
+        Collection<AttributeModifier> speedModifiers = itemMeta.getAttributeModifiers(Attribute.GENERIC_ATTACK_DAMAGE);
+        if (speedModifiers != null) {
+            for (AttributeModifier modifier : speedModifiers) {
+                currentSpeed = modifier.getAmount();
+            }
         } else {
-            player.sendMessage("existingSpeedModifier is null");
+            player.sendMessage("null");
         }
 
-        AttributeModifier newSpeedModifier = new AttributeModifier(UUID.randomUUID(), "CustomSpeed", currentSpeed - statIncrease * 3.0, AttributeModifier.Operation.ADD_NUMBER);
+        AttributeModifier newSpeedModifier = new AttributeModifier(UUID.randomUUID(), "generic.attack_speed", currentSpeed + statIncrease, AttributeModifier.Operation.ADD_NUMBER);
         itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, newSpeedModifier);
 
         item.setItemMeta(itemMeta);
@@ -200,18 +211,19 @@ public class Click14SlotStatEnforce {
                 num = 1;
             }
 
-            for (int i = 0; i < 4; i++) {
+            // 1 ~ 4강 스텟 업그레이드
+            for (int i = 1; i < 5; i++) {
                 if (num == i) {
                     modifyItemByProbability(item, player);
                 }
             }
-            itemMeta.setDisplayName(Color.chat("&f[&d&l" + num + "enforce&f] " + getItemName(itemStack)));
+            itemMeta.setDisplayName(Color.chat("&f[&d&l" + num + "강&f] " + getItemName(itemStack)));
             itemStack.setItemMeta(itemMeta);
             inv.setItem(16, event.getView().getItem(10));
-            player.sendMessage(title + "successfully enforce");
+            player.sendMessage(title + "강화에 성공하셨습니다.");
         } else {
             inv.setItem(16, event.getView().getItem(10));
-            player.sendMessage(title + "failure enforce");
+            player.sendMessage(title + "강화에 실패하셨습니다.");
         }
         event.getView().setItem(10, ItemBuild.AIR);
         event.getView().setItem(12, ItemBuild.AIR);
@@ -221,4 +233,4 @@ public class Click14SlotStatEnforce {
         String itemName = item.getType().toString().toLowerCase();
         return itemName.replace("", "");
     }
-}
+}*/

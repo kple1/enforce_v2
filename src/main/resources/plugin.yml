@@ -7,14 +7,5 @@ commands:
   enforceTicket:
     aliases: "강화권"
 
-  statEnforceTicket:
-    aliases: "스텟강화권"
-
-  enforceResetTicket:
-    aliases: "강화초기화권"
-
   enforceAnvilCreate:
     aliases: "강화모루"
-
-  test:
-    aliases: "테스트"

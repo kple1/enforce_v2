@@ -2,10 +2,7 @@ package io.plugin.enforce_v2;
 
 import io.plugin.enforce_v2.Command.*;
 import io.plugin.enforce_v2.Data.UserData;
-import io.plugin.enforce_v2.Listener.AnvilClick;
-import io.plugin.enforce_v2.Listener.AnvilSet;
-import io.plugin.enforce_v2.Listener.InvClickEvent;
-import io.plugin.enforce_v2.Listener.InvCloseEvent;
+import io.plugin.enforce_v2.Listener.*;
 import io.plugin.enforce_v2.Utils.Color;
 import io.plugin.enforce_v2.Utils.ItemBuild;
 import org.bukkit.Bukkit;
@@ -37,10 +34,8 @@ public final class Main extends JavaPlugin {
 
     public void Commands() {
         Bukkit.getPluginCommand("enforceTicket").setExecutor(new GiveEnforceTicket());
-        Bukkit.getPluginCommand("statEnforceTicket").setExecutor(new StatEnforceTicketCreate());
         Bukkit.getPluginCommand("enforceResetTicket").setExecutor(new EnforceResetTicket());
         Bukkit.getPluginCommand("enforceAnvilCreate").setExecutor(new EnforceAnvilCreate());
-        Bukkit.getPluginCommand("test").setExecutor(new test());
     }
 
     public void Listener() {

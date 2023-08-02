@@ -53,15 +53,6 @@ public class ItemBuild {
         return null;
     }
 
-    public static ItemStack give(Player player) {
-        ItemStack giveItem = result_EnchantType(Material.DIAMOND_SWORD, 1, (Color.chat("&b&o&l강화책")), Enchantment.DAMAGE_ALL, 6);
-        ItemMeta itemMeta = giveItem.getItemMeta();
-        itemMeta.setDisplayName(Color.chat("&f[&d&l6강&f] 다이아몬드 검"));
-        giveItem.setItemMeta(itemMeta);
-        player.getInventory().addItem(giveItem);
-        return null;
-    }
-
     public static ItemStack backUp(InventoryClickEvent event) {
         ItemStack itemToBackup = event.getView().getItem(10);
         ItemMeta itemToBackUpMeta = itemToBackup.getItemMeta();
@@ -85,7 +76,7 @@ public class ItemBuild {
             Color.chat("특수판별 코드 : 0a"));
 
     public final static ItemStack blackGlass = result_LongType(Material.BLACK_STAINED_GLASS_PANE, 1, "");
-    public final static ItemStack AIR = result_ShortType(Material.AIR, 1);
+    public final static ItemStack AIR = result_ShortType(Material.AIR, 0);
     public final static ItemStack diamond = result_LongType(Material.DIAMOND, 1, Color.chat("&c&l&oStart!"));
     public final static ItemStack yellowGlass = result_NameType(Material.YELLOW_STAINED_GLASS_PANE, 1, Color.chat("&a&o&l강화중.."));
 }

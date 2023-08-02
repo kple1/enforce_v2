@@ -2,18 +2,13 @@ package io.plugin.enforce_v2.Listener;
 
 import io.plugin.enforce_v2.Data.UserData;
 import io.plugin.enforce_v2.Utils.Click14SlotNormalEnchant;
-import io.plugin.enforce_v2.Utils.Click14SlotStatEnforce;
 import io.plugin.enforce_v2.Utils.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.Map;
 
 public class InvClickEvent implements Listener {
 
@@ -66,12 +61,13 @@ public class InvClickEvent implements Listener {
         }
 
         if (event.getSlot() == 14) {
+            if (event.getView().getItem(10) == null || event.getView().getItem(12) == null) {
+                player.sendMessage(title + "강화할 아이템을 올려주세요!");
+                return;
+            }
             //기본 인챈트
             Click14SlotNormalEnchant click14SlotNormalEnchant = new Click14SlotNormalEnchant();
             click14SlotNormalEnchant.normalEnchant(event);
-            //스텟 강화
-            Click14SlotStatEnforce click14SlotStatEnforce = new Click14SlotStatEnforce();
-            click14SlotStatEnforce.statEnforce(event);
         }
     }
 }
