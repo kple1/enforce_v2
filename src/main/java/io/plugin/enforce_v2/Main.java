@@ -16,13 +16,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static io.plugin.enforce_v2.Data.UserData.config;
 import static io.plugin.enforce_v2.Data.UserData.playerFile;
@@ -30,7 +27,6 @@ import static io.plugin.enforce_v2.Data.UserData.playerFile;
 public final class Main extends JavaPlugin {
 
     public static Main plugin;
-    private int taskId;
     private File uuidFolder;
     String title = Color.chat("&f[ &c&l강화 &f] ");
 
@@ -40,7 +36,6 @@ public final class Main extends JavaPlugin {
     }
 
     public void Listener() {
-        //Bukkit.getPluginManager().registerEvents(new AnvilSet(), this);
         Bukkit.getPluginManager().registerEvents(new AnvilClick(), this);
         Bukkit.getPluginManager().registerEvents(new InvClickEvent(), this);
         Bukkit.getPluginManager().registerEvents(new InvCloseEvent(), this);
@@ -58,13 +53,16 @@ public final class Main extends JavaPlugin {
     }
 
     public void startTimerClick14SlotNormalEnchant(Inventory inv, InventoryClickEvent event, Player player) {
-        taskId = new BukkitRunnable() {
+        int taskId = new BukkitRunnable() {
             int time = 1;
 
             @Override
             public void run() {
                 if (time >= 1 && time <= 9) {
                     inv.setItem(26 + time, ItemBuild.yellowGlass);
+                }
+
+                if (time >= 1 && time <= 8) {
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 10, 1);
                 }
 
@@ -110,45 +108,25 @@ public final class Main extends JavaPlugin {
             event.getView().setItem(16, itemStack);
             player.sendMessage(title + "강화에 성공 하셨습니다!");
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-
-            int slot16Num = 0;
-
-            ItemStack itemStack1 = event.getView().getItem(16);
-            ItemMeta itemMeta1 = itemStack1.getItemMeta();
-            String displayNameInSlot16 = itemMeta1.getDisplayName();
-
-            String pattern1 = "\\d+";
-            Pattern p1 = Pattern.compile(pattern1);
-            Matcher matcher1 = p1.matcher(displayNameInSlot16);
-
-            if (matcher1.find()) {
-                String numericPart = matcher1.group();
-                slot16Num = Integer.parseInt(numericPart);
-                if (slot16Num == 7) {
-                    for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                        onlinePlayer.sendMessage(Color.chat(title + "&l&a" + player.getName() + "&f님이 7강 강화에 성공하셨습니다."));
-                        break;
-                    }
-                }
-            }
         } else {
             player.sendMessage(title + "강화에 실패 하셨습니다");
             event.getView().setItem(16, ItemBuild.backUp(event));
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
+            return;
         }
 
         //강화가 완료됨. 10, 12슬롯 삭제
         if (event.getView().getItem(16) != null) {
             event.getView().setItem(10, ItemBuild.AIR);
             removeItemsFromMainHand(event, 1);
+            return;
         }
     }
 
-    public ItemStack removeItemsFromMainHand(InventoryClickEvent event, int amountToRemove) {
+    public void removeItemsFromMainHand(InventoryClickEvent event, int amountToRemove) {
         ItemStack itemToRemove = event.getInventory().getItem(12).clone();
         itemToRemove.setAmount(amountToRemove);
         event.getInventory().removeItem(itemToRemove);
-        return itemToRemove;
     }
 
     public File getUuidFolder() {

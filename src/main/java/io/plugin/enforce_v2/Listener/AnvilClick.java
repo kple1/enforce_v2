@@ -12,17 +12,14 @@ import org.bukkit.inventory.Inventory;
 
 public class AnvilClick implements Listener {
 
-    private Inventory customInventory;
-
     @EventHandler
     public void onAnvilClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-
         if (event.getClickedBlock().getType() != Material.ANVIL) return;
-
         event.setCancelled(true);
-        this.customInventory = Bukkit.createInventory(null, 36, "강화");
+
+        Inventory customInventory = Bukkit.createInventory(null, 36, "강화");
         for (int i = 0; i < 36; i++) {
             customInventory.setItem(i, ItemBuild.blackGlass);
         }
