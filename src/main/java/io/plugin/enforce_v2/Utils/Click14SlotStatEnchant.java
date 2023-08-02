@@ -148,6 +148,7 @@ public class Click14SlotStatEnchant {
     }*//*
 
 
+
     private void modifyWeapon(ItemStack item, double statIncrease, Player player) {
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta == null) {
@@ -233,4 +234,5 @@ public class Click14SlotStatEnchant {
         String itemName = item.getType().toString().toLowerCase();
         return itemName.replace("", "");
     }
-}*/
+}
+*/

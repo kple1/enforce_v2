@@ -34,7 +34,6 @@ public final class Main extends JavaPlugin {
 
     public void Commands() {
         Bukkit.getPluginCommand("enforceTicket").setExecutor(new GiveEnforceTicket());
-        Bukkit.getPluginCommand("enforceResetTicket").setExecutor(new EnforceResetTicket());
         Bukkit.getPluginCommand("enforceAnvilCreate").setExecutor(new EnforceAnvilCreate());
     }
 

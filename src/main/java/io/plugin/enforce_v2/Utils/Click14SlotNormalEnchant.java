@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -114,6 +115,10 @@ public class Click14SlotNormalEnchant {
 
             if (enchantments.size() >= 2) {
                 config.set("checkTwoEnchant", 1);
+                if (enchantments.containsKey(Enchantment.ARROW_FIRE) || enchantments.containsKey(Enchantment.ARROW_INFINITE) || enchantments.containsKey(Enchantment.LOYALTY) || enchantments.containsKey(Enchantment.MENDING)) {
+                    player.sendMessage(title + "더 이상 강화가 불가능합니다.");
+                    return;
+                }
             } else {
                 config.set("checkTwoEnchant", 0);
             }
