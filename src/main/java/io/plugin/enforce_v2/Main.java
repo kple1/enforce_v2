@@ -39,6 +39,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new AnvilClick(), this);
         Bukkit.getPluginManager().registerEvents(new InvClickEvent(), this);
         Bukkit.getPluginManager().registerEvents(new InvCloseEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new AnvilSet(plugin), this);
     }
 
     @Override
