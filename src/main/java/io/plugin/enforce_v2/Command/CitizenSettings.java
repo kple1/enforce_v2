@@ -27,6 +27,7 @@ public class CitizenSettings implements CommandExecutor, TabExecutor {
 
             String name = args[2];
             int nextAvailableIndex = Main.getPlugin().getNextAvailableIndex();
+            ConfigurationSection configSection = plugin.getConfig().getConfigurationSection("오픈 강화목록");
             if (!args[0].equals("NPC")) {
                 return true;
             }
@@ -39,7 +40,6 @@ public class CitizenSettings implements CommandExecutor, TabExecutor {
 
             if (args[1].equals("삭제")) {
                 String targetName = args[2];
-                ConfigurationSection configSection = plugin.getConfig().getConfigurationSection("오픈 강화목록");
 
                 if (configSection == null) {
                     player.sendMessage(title + "오픈 강화목록이 비어있습니다.");
@@ -64,6 +64,21 @@ public class CitizenSettings implements CommandExecutor, TabExecutor {
                 return true;
             }
 
+            if (args[1].equals("목록")) {
+                if (configSection == null) {
+                    player.sendMessage(title + "오픈 강화목록이 비어있습니다.");
+                    return true;
+                }
+
+                player.sendMessage(Color.chat("&f&l[ &c&l오픈 강화목록 &f&l]&f"));
+                for (String key : configSection.getKeys(false)) {
+                    String getConfigKey = plugin.getConfig().getString("오픈 강화목록." + key);
+                    if (getConfigKey != null) {
+                        player.sendMessage(getConfigKey);
+                    }
+                }
+                return true;
+            }
         }
         return true;
     }
