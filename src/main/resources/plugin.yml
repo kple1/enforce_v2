@@ -9,3 +9,6 @@ commands:
 
   enforceAnvilCreate:
     aliases: "강화모루"
+
+  enforceCitizenSettings:
+    aliases: "강화"

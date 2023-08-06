@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'io.plugin'
-version = '1.0.0'
+version = '1.0'
 
 repositories {
     mavenCentral()
@@ -15,10 +15,17 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven {
+        name "citizensRepo"
+        url "https://maven.citizensnpcs.co/repo"
+    }
 }
 
 dependencies {
     compileOnly "io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT"
+    compileOnly('net.citizensnpcs:citizens-main:2.0.30-SNAPSHOT') {
+        exclude group: '*', module: '*'
+    }
 }
 
 jar {

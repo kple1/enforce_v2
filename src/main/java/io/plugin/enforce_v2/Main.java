@@ -30,23 +30,25 @@ public final class Main extends JavaPlugin {
     private File uuidFolder;
     String title = Color.chat("&f[ &c&l강화 &f] ");
 
-    public void Commands() {
+    public void commands() {
         Bukkit.getPluginCommand("enforceTicket").setExecutor(new GiveEnforceTicket());
         Bukkit.getPluginCommand("enforceAnvilCreate").setExecutor(new EnforceAnvilCreate());
+        Bukkit.getPluginCommand("enforceCitizenSettings").setExecutor(new CitizenSettings());
     }
 
-    public void Listener() {
+    public void listener() {
         Bukkit.getPluginManager().registerEvents(new AnvilClick(), this);
         Bukkit.getPluginManager().registerEvents(new InvClickEvent(), this);
         Bukkit.getPluginManager().registerEvents(new InvCloseEvent(), this);
         Bukkit.getPluginManager().registerEvents(new AnvilSet(plugin), this);
+        Bukkit.getPluginManager().registerEvents(new ClickToOpenNPC(), this);
     }
 
     @Override
     public void onEnable() {
         plugin = this;
-        Commands();
-        Listener();
+        commands();
+        listener();
     }
 
     public static Main getPlugin() {
@@ -159,5 +161,26 @@ public final class Main extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void inventory(Player player) {
+        Inventory customInventory = Bukkit.createInventory(null, 36, "강화");
+        for (int i = 0; i < 36; i++) {
+            customInventory.setItem(i, ItemBuild.blackGlass);
+        }
+        customInventory.setItem(10, ItemBuild.AIR);
+        customInventory.setItem(12, ItemBuild.AIR);
+        customInventory.setItem(14, ItemBuild.diamond);
+        customInventory.setItem(16, ItemBuild.AIR);
+        player.openInventory(customInventory);
+        player.sendMessage(title + "인벤토리가 오픈되었습니다!");
+    }
+
+    public int getNextAvailableIndex() {
+        int nextAvailableIndex = 0;
+        while (plugin.getConfig().getString("오픈 강화목록." + nextAvailableIndex) != null) {
+            nextAvailableIndex++;
+        }
+        return nextAvailableIndex;
     }
 }
