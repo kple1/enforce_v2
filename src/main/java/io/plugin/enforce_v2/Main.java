@@ -59,15 +59,28 @@ public final class Main extends JavaPlugin {
 
             @Override
             public void run() {
-                if (time >= 1 && time <= 9) {
-                    inv.setItem(26 + time, ItemBuild.yellowGlass);
-                }
-
-                if (time >= 1 && time <= 8) {
+                if (time == 1) {
+                    inv.setItem(26 + time, ItemBuild.redGlass);
+                    inv.setItem(27 + time, ItemBuild.redGlass);
+                    inv.setItem(28 + time, ItemBuild.redGlass);
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 10, 1);
                 }
 
-                if (time == 9) {
+                if (time == 2) {
+                    inv.setItem(28 + time, ItemBuild.yellowGlass);
+                    inv.setItem(29 + time, ItemBuild.yellowGlass);
+                    inv.setItem(30 + time, ItemBuild.yellowGlass);
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 10, 1);
+                }
+
+                if (time == 3) {
+                    inv.setItem(30 + time, ItemBuild.greenGlass);
+                    inv.setItem(31 + time, ItemBuild.greenGlass);
+                    inv.setItem(32 + time, ItemBuild.greenGlass);
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 10, 1);
+                }
+
+                if (time == 4) {
                     YamlConfiguration config = UserData.getPlayerConfig(player);
                     config.set("Lock", 0);
                     saveYamlConfiguration();
