@@ -18,29 +18,17 @@ public class InvClickEvent implements Listener {
     public void invClickEvent(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
 
-        if (!event.getView().getTitle().equals("강화")) {
-            return;
-        }
+        if (!event.getView().getTitle().equals("강화")) return;
 
-        if (event.getCurrentItem() == null) {
-            return;
-        }
+        if (event.getCurrentItem() == null) return;
 
-        if (event.getCurrentItem().getType() == Material.AIR) {
-            return;
-        }
+        if (event.getCurrentItem().getType() == Material.AIR) return;
 
-        if (event.getClickedInventory() == null) {
-            return;
-        }
+        if (event.getClickedInventory() == null) return;
 
-        if (event.getClickedInventory().equals(player.getInventory())) {
-            return;
-        }
+        if (event.getClickedInventory().equals(player.getInventory())) return;
 
-        if (event.getRawSlot() >= event.getInventory().getSize()) {
-            return;
-        }
+        if (event.getRawSlot() >= event.getInventory().getSize()) return;
 
         YamlConfiguration config = UserData.getPlayerConfig(player);
         int getLock = config.getInt("Lock");
