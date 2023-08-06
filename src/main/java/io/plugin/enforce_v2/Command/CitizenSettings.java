@@ -25,7 +25,6 @@ public class CitizenSettings implements CommandExecutor, TabExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
 
-            String name = args[2];
             int nextAvailableIndex = Main.getPlugin().getNextAvailableIndex();
             ConfigurationSection configSection = plugin.getConfig().getConfigurationSection("오픈 강화목록");
             if (!args[0].equals("NPC")) {
@@ -33,6 +32,7 @@ public class CitizenSettings implements CommandExecutor, TabExecutor {
             }
 
             if (args[1].equals("추가")) {
+                String name = args[2];
                 plugin.getConfig().set("오픈 강화목록." + nextAvailableIndex, name);
                 plugin.saveConfig();
                 player.sendMessage(title + Color.chat("&a" + args[2] + "&f이(가) 추가되었습니다."));
