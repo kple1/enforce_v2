@@ -3,11 +3,10 @@ package io.plugin.enforce_v2.Listener;
 import io.plugin.enforce_v2.Main;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
-import java.util.Set;
 
 import static io.plugin.enforce_v2.Main.plugin;
 
@@ -18,8 +17,12 @@ public class ClickToOpenNPC implements Listener {
         Player player = event.getClicker();
         NPC npc = event.getNPC();
 
-        Set<String> getNumber = plugin.getConfig().getConfigurationSection("오픈 강화목록").getKeys(false);
-        for (String key : getNumber) {
+        ConfigurationSection configSection = plugin.getConfig().getConfigurationSection("오픈 강화목록");
+        if (configSection == null) {
+            return;
+        }
+
+        for (String key : configSection.getKeys(false)) {
             if (key == null) {
                 continue;
             }
