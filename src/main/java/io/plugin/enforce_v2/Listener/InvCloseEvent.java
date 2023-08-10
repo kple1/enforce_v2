@@ -29,20 +29,14 @@ public class InvCloseEvent implements Listener {
 
         Main.getPlugin().resetConfig();
 
-        ItemStack getItem10Slot = event.getView().getItem(10);
-        ItemStack getItem12Slot = event.getView().getItem(12);
         ItemStack getItem16Slot = event.getView().getItem(16);
-
-        if (getItem10Slot != null) {
-            player.getInventory().addItem(getItem10Slot);
-        }
-
-        if (getItem12Slot != null) {
-            player.getInventory().addItem(getItem12Slot);
-        }
+        Inventory inventory = event.getInventory();
 
         if (getItem16Slot != null) {
-            player.getInventory().addItem(getItem16Slot);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                event.getPlayer().openInventory(inventory);
+            }, 1);
+            player.sendMessage(title + "아이템을 꺼내주세요!");
         }
     }
 
@@ -50,12 +44,11 @@ public class InvCloseEvent implements Listener {
     public void loadToEnforceCancelledCloseInventory(InventoryCloseEvent event) {
         Player player = (Player) event.getPlayer();
         YamlConfiguration config = UserData.getPlayerConfig(player);
-
         if (event.getView().getTitle().equals("강화")) {
+
             if (config.getInt("Lock") != 1) return;
 
             Inventory inventory = event.getInventory();
-
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 event.getPlayer().openInventory(inventory);
             }, 1);
