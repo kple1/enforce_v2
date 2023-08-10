@@ -136,8 +136,17 @@ public final class Main extends JavaPlugin {
         if (event.getView().getItem(16) != null) {
             event.getView().setItem(10, ItemBuild.AIR);
             removeItemsFromMainHand(event, 1);
+            resetConfig();
             return;
         }
+    }
+
+    public void resetConfig() {
+        config.set("Lock", 0);
+        config.set("itemInfo.1.anotherEnchant", null);
+        config.set("itemInfo.2.anotherEnchant", null);
+        config.set("data", 0);
+        Main.getPlugin().saveYamlConfiguration();
     }
 
     public void removeItemsFromMainHand(InventoryClickEvent event, int amountToRemove) {
