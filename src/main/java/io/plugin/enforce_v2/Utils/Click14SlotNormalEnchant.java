@@ -20,7 +20,6 @@ public class Click14SlotNormalEnchant {
     String title = Color.chat("&f[ &c&l강화 &f] ");
 
     public void normalEnchant(InventoryClickEvent event) {
-        //enchant level 얻어오기
         Player player = (Player) event.getWhoClicked();
         YamlConfiguration config = UserData.getPlayerConfig(player);
 
@@ -29,17 +28,19 @@ public class Click14SlotNormalEnchant {
         if (!get12DisplayName.equals("§b§l§o강화책")) {
             return;
         }
+        ItemStack itemInSlot10 = event.getView().getItem(10);
+        ItemStack itemInSlot12 = event.getView().getItem(12);
 
         int level = 0;
-        Map<Enchantment, Integer> enchantments = event.getView().getItem(10).getEnchantments();
-        if (!enchantments.isEmpty()) {
-            level = enchantments.entrySet().iterator().next().getValue();
+        Map<Enchantment, Integer> item10Enchants = itemInSlot10.getItemMeta().getEnchants();
+        for (Map.Entry<Enchantment, Integer> entry : item10Enchants.entrySet()) {
+            level = entry.getValue();
         }
 
         int maxEnchantmentLevel = 0;
-        Map<Enchantment, Integer> enchantments1 = event.getView().getItem(12).getEnchantments();
-        if (!enchantments1.isEmpty()) {
-            maxEnchantmentLevel = enchantments1.entrySet().iterator().next().getValue();
+        Map<Enchantment, Integer> item12Enchants = itemInSlot12.getItemMeta().getEnchants();
+        if (!item12Enchants.isEmpty()) {
+            maxEnchantmentLevel = item12Enchants.entrySet().iterator().next().getValue();
         }
 
         //최대레벨 저장
@@ -74,8 +75,6 @@ public class Click14SlotNormalEnchant {
         config.set("itemInfo.2.percent", percent);
         Main.getPlugin().saveYamlConfiguration();
 
-        ItemStack itemInSlot10 = event.getView().getItem(10);
-        ItemStack itemInSlot12 = event.getView().getItem(12);
         if (itemInSlot10 == null || itemInSlot12 == null) {
             player.sendMessage(title + "강화할 도구 또는 사용권을 배치해주세요.");
             return;
@@ -108,14 +107,12 @@ public class Click14SlotNormalEnchant {
                 return;
             }
 
-            Map<Enchantment, Integer> item10Enchants = itemInSlot10.getItemMeta().getEnchants();
             for (Enchantment enchantment : item10Enchants.keySet()) {
                 String enchantName = enchantment.getKey().getKey();
                 config.set("itemInfo.1.anotherEnchant", enchantName);
             }
             Main.getPlugin().saveYamlConfiguration();
 
-            Map<Enchantment, Integer> item12Enchants = itemInSlot12.getItemMeta().getEnchants();
             for (Enchantment enchantment : item12Enchants.keySet()) {
                 String enchantName = enchantment.getKey().getKey();
                 config.set("itemInfo.2.anotherEnchant", enchantName);
@@ -124,11 +121,10 @@ public class Click14SlotNormalEnchant {
 
             int getLevel1 = config.getInt("itemInfo.1.level");
             int getLevel2 = config.getInt("itemInfo.2.level");
-            int twoEnchantCheck = config.getInt("checkTwoEnchant");
 
-            if (enchantments.size() >= 2) {
+            if (item10Enchants.size() >= 2) {
                 config.set("checkTwoEnchant", 1);
-                if (enchantments.containsKey(Enchantment.ARROW_FIRE) || enchantments.containsKey(Enchantment.ARROW_INFINITE) || enchantments.containsKey(Enchantment.LOYALTY) || enchantments.containsKey(Enchantment.MENDING)) {
+                if (item10Enchants.containsKey(Enchantment.ARROW_FIRE) || item10Enchants.containsKey(Enchantment.ARROW_INFINITE) || item10Enchants.containsKey(Enchantment.LOYALTY) || item10Enchants.containsKey(Enchantment.MENDING)) {
                     player.sendMessage(title + "더 이상 강화가 불가능합니다.");
                     return;
                 }
@@ -140,11 +136,9 @@ public class Click14SlotNormalEnchant {
             String anotherEnchantSlot12 = config.getString("itemInfo.2.anotherEnchant");
 
             if (Objects.equals(anotherEnchantSlot10, anotherEnchantSlot12) || anotherEnchantSlot10 == null) {
-                if (twoEnchantCheck == 0) {
-                    if (!(getLevel1 - getLevel2 == -1)) {
-                        player.sendMessage(title + "아이템 레벨격차가 맞지않습니다.");
-                        return;
-                    }
+                if (!(getLevel1 - getLevel2 == -1)) {
+                    player.sendMessage(title + "아이템 레벨격차가 맞지않습니다.");
+                    return;
                 }
             }
 

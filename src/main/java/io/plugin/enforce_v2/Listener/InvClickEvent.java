@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 
 public class InvClickEvent implements Listener {
 
@@ -50,11 +49,6 @@ public class InvClickEvent implements Listener {
         }
 
         if (event.getSlot() == 14) {
-            if (event.getView().getItem(10) == null || event.getView().getItem(12) == null) {
-                player.sendMessage(title + "강화할 아이템을 올려주세요!");
-                return;
-            }
-            //기본 인챈트
             Click14SlotNormalEnchant click14SlotNormalEnchant = new Click14SlotNormalEnchant();
             click14SlotNormalEnchant.normalEnchant(event);
         }

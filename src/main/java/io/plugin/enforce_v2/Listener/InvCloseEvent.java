@@ -27,11 +27,7 @@ public class InvCloseEvent implements Listener {
         if (!event.getView().getTitle().equals("강화")) return;
         if (config.getInt("Lock") == 1) return;
 
-        config.set("Lock", 0);
-        config.set("itemInfo.1.anotherEnchant", null);
-        config.set("itemInfo.2.anotherEnchant", null);
-        config.set("data", 0);
-        Main.getPlugin().saveYamlConfiguration();
+        Main.getPlugin().resetConfig();
 
         ItemStack getItem10Slot = event.getView().getItem(10);
         ItemStack getItem12Slot = event.getView().getItem(12);
